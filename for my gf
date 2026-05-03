@@ -1,0 +1,205 @@
+DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maafin akuu yaa sayangg ☹️...</title>
+    <style>
+        body {
+            background-color: #fff0f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #ff69b4;
+            margin-bottom: 20px;
+        }
+
+        h1 { color: #d63384; font-size: 24px; }
+        p { color: #555; line-height: 1.5; }
+
+        .btn-group {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+
+        button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        #btnYes { background-color: #ff69b4; color: white; font-size: 18px; }
+        #btnNo { background-color: #eee; color: #777; position: relative; }
+
+        /* Animasi Bunga */
+        .flower {
+            position: fixed;
+            top: -10%;
+            font-size: 24px;
+            z-index: 100;
+            user-select: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        #finalMessage {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 200;
+        }
+
+        .slider-container {
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        input[type=range] {
+            width: 100%;
+            accent-color: #ff69b4;
+        }
+
+        /* Sembunyikan player lagu */
+        #musicPlayer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Musik: Justin Bieber - Sorry -->
+    <iframe id="musicPlayer" width="0" height="0" src="https://www.youtube.com/embed/fRh_vgS2dFE?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
+
+    <div id="container">
+        <img src="https://ibb.co/N6dj6YGD" alt="Syfa Sayang">
+        <h1 id="headline">sayangnyaa ripaa, akuu mauu usahainn lagii semuanyaa</h1>
+        <p id="text">"Is it too late now to say sorry?" <br> Maafin aku ya sayangg? akuu bakall lakuinn apapun demi di maafin sama kamu, akuu gamauu putuss aku pisah, kasii aku kesempatan lagi ya sayangg Plisss? :(</p>
+        <div class="btn-group">
+            <button id="btnYes" onclick="accepted()">Iya, Dimaafin</button>
+            <button id="btnNo" onclick="rejected()">Gak Mau!</button>
+        </div>
+    </div>
+
+    <div id="finalMessage">
+        <h1 style="font-size: 40px;">YEEAAYY! 😍</h1>
+        <p>Makasih udah dimaafin, Syfa cantik!<br>Ripa sayang kamu banget!</p>
+        <div class="slider-container">
+            <p>Kadar Sayang Ripa ke Syfa:</p>
+            <input type="range" min="0" max="1000" value="0" id="loveSlider">
+            <h2 id="percentVal">0%</h2>
+        </div>
+        <p style="margin-top: 20px; font-style: italic; font-size: 12px;">"Swipe terus sampe 1000%!"</p>
+    </div>
+
+    <script>
+        let noClickCount = 0;
+        let musicStarted = false;
+        const btnNo = document.getElementById('btnNo');
+        const btnYes = document.getElementById('btnYes');
+        const textElement = document.getElementById('text');
+
+        const phrases = [
+            "sayangg :(?",
+            "sayangg pleasee? :(",
+            "jadi makin kecil kann tombolnya?",
+            "yah ilang dong nanti...",
+            "please klik yang pink aja sayang",
+            "Sengaja ya biar aku nangis:(?",
+            "Gak bisa diklik kan? please iya aja yaa?"
+        ];
+
+        // Fungsi mulai musik (dipicu interaksi pertama)
+        function playMusic() {
+            if (!musicStarted) {
+                const iframe = document.getElementById('musicPlayer');
+                iframe.src += "&autoplay=1";
+                musicStarted = true;
+            }
+        }
+
+        function rejected() {
+            playMusic(); // Lagu mulai pas dia nolak
+            noClickCount++;
+            
+            // Mengecilkan tombol No
+            let scaleNo = Math.max(0.1, 1 - (noClickCount * 0.2));
+            btnNo.style.transform = `scale(${scaleNo})`;
+            
+            // Membesarkan tombol Yes
+            let scaleYes = 1 + (noClickCount * 0.3);
+            btnYes.style.transform = `scale(${scaleYes})`;
+
+            // Ganti teks pesan
+            if (noClickCount <= phrases.length) {
+                textElement.innerText = phrases[noClickCount - 1];
+            }
+        }
+
+        function accepted() {
+            playMusic(); // Lagu mulai kalau dia langsung dimaafin
+            document.getElementById('finalMessage').style.display = 'flex';
+            startFlowers();
+        }
+
+        function startFlowers() {
+            setInterval(() => {
+                const flower = document.createElement('div');
+                flower.classList.add('flower');
+                const types = ['🌸', '🌹', '❤️', '✨'];
+                flower.innerHTML = types[Math.floor(Math.random() * types.length)];
+                flower.style.left = Math.random() * 100 + 'vw';
+                flower.style.animationDuration = Math.random() * 3 + 2 + 's';
+                document.body.appendChild(flower);
+                
+                setTimeout(() => { flower.remove(); }, 5000);
+            }, 150);
+        }
+
+        const slider = document.getElementById('loveSlider');
+        const percentVal = document.getElementById('percentVal');
+        
+        slider.oninput = function() {
+            percentVal.innerHTML = this.value + "%";
+            if(this.value == 1000) {
+                percentVal.innerHTML = "1000% (MAACII SAYANGGKUUUU MUAHHH MUAHH MUAH) ❤️❤️❤️";
+                percentVal.style.color = "#ff69b4";
+            }
+        }
+    </script>
+</body>
+</html>
